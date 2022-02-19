@@ -1,8 +1,13 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -22,6 +27,8 @@ public class Controller {
     TextArea resultArea;
 
     TextField eqFields[];
+    @FXML
+    LineChart lineChart;
 
     private Main main;
     Equations type;
@@ -37,6 +44,37 @@ public class Controller {
 
     public void findRoot(ActionEvent actionEvent) {
         main.GeneticAlgorithm(getData(), 10000);
+    }
+
+    //график
+    public void doGraph(Double res){
+        lineChart.getData().removeAll();
+        int min = getData().getRangeMin();
+        int max = getData().getRangeMax();
+
+        double f = 0;
+        double coef[] = getData().getCoef();
+        System.out.println("колво коэф "+coef.length);
+        ObservableList<XYChart.Data<Number, Number>> data = FXCollections.observableArrayList();
+        for(int j = min; j<=max; j++) {
+
+            for (int i = 0; i < coef.length; i++) {
+                f += Math.pow(j, coef.length - 1 - i) * coef[i];
+            }
+            data.add( new XYChart.Data<Number, Number>(j, f));
+            f=0;
+            System.out.println("для графика" + f);
+        }
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        lineChart.setTitle("Визуализация корней");
+
+        XYChart.Series<Number, Number> s1 = new XYChart.Series<>();
+        s1.getData().addAll(data);
+        lineChart.getData().add(s1);
+
+
+
     }
 
     public void changeEq(ActionEvent actionEvent) {

@@ -48,7 +48,8 @@ public class Main extends Application {
         if(vals == null)
             return;
         data = vals;
-        String result = "Программе не удалось найти подходящий ответ или уранение не имеет решений.\nПопробуйте изменить диапазон поиска.";
+        String result = "Программе не удалось найти подходящий ответ\n или уравнение не имеет решений." +
+                "\nПопробуйте изменить диапазон поиска.";
 
         for (int i = 0; i < iterations; i++) {
             initializePopulation();
@@ -64,6 +65,8 @@ public class Main extends Application {
                 result = "Найдено:\n";
                 for (double n: population.get(0).num) {
                     result += format.format(n) + "\n";
+                    //построить график
+                    controller.doGraph(n);
                 }
                 result += "За " + i + " циклов.";
                 break;
